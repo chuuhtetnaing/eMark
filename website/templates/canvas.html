@@ -1,0 +1,20 @@
+{%extends "base.html" %}
+{%block title %}Canvas{% endblock %}
+
+{% block content %}
+<h1 align="center">Canvas</h1>
+<!-- <div align=center><canvas id="paint" width="750" height="450" style="border: 5px solid #000000;">Update your browser to support HTML5 Canvas</canvas>
+</div> -->
+<div id="konva-holder"></div>
+<br />
+<div align="center">
+<button id="penciltool" type="button" class="btn btn-info" onclick="pencil()">Pencil</button>
+<button id="linetool" type="button" class="btn btn-info" onclick="line()">Line</button>
+<button id="rectangletool" type="button" class="btn btn-info" onclick="rectangle()">Rectangle</button>
+<button id="circletool" type="button" class="btn btn-info" onclick="circle()">Circle</button>
+<button id="erasertool" type="button" class="btn btn-info" onclick="eraser()">Eraser</button>
+<button id="resettool" type="button" class="btn btn-info" onclick="reset()">Reset</button>
+</div>
+{% endblock %}
+
+
