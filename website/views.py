@@ -59,38 +59,53 @@ def canvas():
     
     return redirect(url_for('views.canvas'))
 
+# @views.route('/watermark', methods=['GET','POST'])
+# @login_required
+# def watermark():
+#     if request.method == 'POST':
+#         file = request.files['image']
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             app.config['UPLOAD_FOLDER'] = 'website\Image'
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             img = Image.open(file).convert("RGBA")
+
+#         txt = Image.new('RGBA', img.size, (255,255,255,0))
+
+#         #Creating text and font object
+#         text = 'Digital Watermarked'
+#         font = ImageFont.truetype('arial.ttf', 82)
+
+#         #Creating draw object
+#         draw = ImageDraw.Draw(txt)
+
+#         #Positioning Text
+#         textwidth, textheight = draw.textsize(text,font)
+#         width, height = img.size
+#         x=width/2-textwidth/2
+#         y=height-textheight-300
+
+#         #Applying Text
+#         draw.text((x,y), text, fill=(255,255,255,125), font=font)
+
+#         #Saving the new image
+#         watermarked = Image.alpha_composite(img,txt)
+#         watermarked.save(r'website/Image/watermarked.png')
+#         flash('Digital Watermark embedded!', category='success')   
+    
+#     return render_template("watermark.html", user=current_user)
+
+
+
 @views.route('/watermark', methods=['GET','POST'])
 @login_required
 def watermark():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            app.config['UPLOAD_FOLDER'] = 'website\Image'
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            img = Image.open(file).convert("RGBA")
+    if request.method =='POST':
+        #Get the uploaded file from the form data
+        file = request.files['image']
 
-        txt = Image.new('RGBA', img.size, (255,255,255,0))
+        #Save the file to a location on the server
+        file.save(r'website/Image/watermarked.png')
 
-        #Creating text and font object
-        text = 'Digital Watermarked'
-        font = ImageFont.truetype('arial.ttf', 82)
-
-        #Creating draw object
-        draw = ImageDraw.Draw(txt)
-
-        #Positioning Text
-        textwidth, textheight = draw.textsize(text,font)
-        width, height = img.size
-        x=width/2-textwidth/2
-        y=height-textheight-300
-
-        #Applying Text
-        draw.text((x,y), text, fill=(255,255,255,125), font=font)
-
-        #Saving the new image
-        watermarked = Image.alpha_composite(img,txt)
-        watermarked.save(r'website/Image/watermarked.png')
-        flash('Digital Watermark embedded!', category='success')   
-    
+    #Return a  response to the client
     return render_template("watermark.html", user=current_user)
