@@ -24,7 +24,7 @@ class User(db.Model, UserMixin):
 #     date = db.Column(db.DateTime(timezone=True), default=func.now())
 #     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-class Image(db.Model):
+class Imge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.Text, unique=True, nullable=False)
     name = db.Column(db.Text, nullable=False)

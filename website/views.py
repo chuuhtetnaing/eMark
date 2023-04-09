@@ -1,11 +1,14 @@
-from flask import Blueprint, Flask, render_template, flash, request, jsonify, redirect, url_for
+import io
+from flask import Blueprint, Flask, render_template, flash, request, jsonify, redirect, url_for, Response, send_file
 from flask_login import login_required, current_user
-from .models import Note, Image
+from .models import Note, Imge
 from . import db
 import json
 from PIL import Image
 import os
 from werkzeug.utils import secure_filename
+
+src="https://code.jquery.com/jquery-3.6.0.min.js"
 
 
 views = Blueprint('views', __name__)
@@ -122,13 +125,25 @@ def watermark():
         pic = request.files['image']
 
         if not pic:
-                return "no pic uploaded", 400
+                return "no pic uploaded", 404
         
         filename = secure_filename(pic.filename)
         mimetype = pic.mimetype
-        img = Image(image=pic.read(), mimetype=mimetype, name=filename)
-        db.session.add(img)
-        db.session.commit()
-        flash('Image has been uploaded!', category='success')
+        img = Imge(image=pic.read(), mimetype=mimetype, name=filename)
+        check = Imge.query.filter_by(name=filename).first()
+        if check:
+            flash('Image already exist.', category='error')
+        else: 
+            db.session.add(img)
+            db.session.commit()
+            flash('Image has been uploaded!', category='success')
 
     return render_template("watermark.html", user=current_user)
+
+@views.route('/get_image/<int:id>')
+def get_img(id):
+    img = Imge.query.filter_by(id=id).first()
+    if not img:
+        return flash('There are no image in the database.', category='error')
+    
+    return Response(img.image, mimetype=img.mimetype)

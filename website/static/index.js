@@ -20,26 +20,25 @@ const stageBorder = new Konva.Rect({
 });
 layer.add(stageBorder)
 
-// main API:
 var imageObj = new Image();
-imageObj.src = '/website/static/watermarked.jpg';
+imageObj.src = "website/static/watermarked.jpg";
 
+// var imageButton = document.getElementById('insert_image');
 imageObj.onload = function () {
-  var yoda = new Konva.Image({
-    x: 50,
-    y: 50,
-    image: imageObj,
-    width: 106,
-    height: 118,
-  });
-
-  // add the shape to the layer
-  layer.add(yoda);
+    var imageKon = new Konva.Image({
+        x: 50,
+        y: 50,
+        image: imageObj,
+        width: imageObj.width,
+        height: imageObj.height,
+    });
+// add the shape to the layer
+layer.add(imageKon);
 };
 
 
-var addButton = document.getElementById('rectangletool');
-addButton.addEventListener('click', function(){
+var rectButton = document.getElementById('rectangletool');
+rectButton.addEventListener('click', function(){
     //create new shape
     var rect = new Konva.Rect({
         x: 50,
@@ -90,9 +89,6 @@ addButton.addEventListener('click', function(){
 //       }
 //     });
 
-
-
-
 function save (){
     var filename = document.getElementById("fname").ariaValueMax;
     var data = JSON.stringify(canvas_data);
@@ -100,4 +96,21 @@ function save (){
     $.post("/", {save_fname: filename, save_cdata: data });
     alert(file + "saved");
     
+}
+
+function convertToDataURLviaCanvas(url, callback, outputFormat){
+    var img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = function(){
+        var canvas = document.createElement('CANVAS');
+        var ctx = canvas.getContext('2d');
+        var dataURL;
+        canvas.height = this.height;
+        canvas.width = this.width;
+        ctx.drawImage(this, 0, 0);
+        dataURL = canvas.toDataURL(outputFormat);
+        callback(dataURL);
+        canvas = null;
+    };
+    img.src = url;
 }
