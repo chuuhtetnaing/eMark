@@ -163,4 +163,10 @@ cython_debug/
 node_modules/
 
 # Mac
-.DS_Store/
+.DS_Store
+
+# Ignore Images from static
+website/static/*.png
+website/static/*.jpg
+website/static/*.jpeg
+website/static/*.gif
