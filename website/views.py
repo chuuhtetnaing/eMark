@@ -1,16 +1,16 @@
-import os
-from flask import Blueprint, Flask, current_app, render_template, flash, request, jsonify, redirect, send_from_directory, url_for
+from flask import Blueprint, Flask, render_template, flash, request, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Note
+from .models import Note, Image
 from . import db
 import json
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 import os
 from werkzeug.utils import secure_filename
 
+
 views = Blueprint('views', __name__)
 app = Flask(__name__)
-    
+
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -51,8 +51,7 @@ def canvas():
     if request.method == "POST":
         filename = request.form['save_fname']
         data = request.form['save_cdata']
-        canvas_image = request.form['save_image']
-        # new_cert = Certificate(projName=filename, data=data, canvas_image=canvas_image, user_id=current_user.id)
+        # new_cert = Project(projName=filename, data=data, canvas_image=canvas_image, user_id=current_user.id)
         # db.session.add(new_cert)
         # db.session.commit()
         flash('Project added!', category='success')
@@ -97,15 +96,39 @@ def canvas():
 
 
 
+# @views.route('/watermark2', methods=['GET','POST'])
+# @login_required
+# def watermark():
+#     if request.method =='POST':
+#         #Get the uploaded file from the form data
+#         file = request.files['image']
+#         file2 = request.form.get('image')
+
+#         #Save the file to a location on the server
+#         file.save(r'website/static/watermarked.jpg')
+
+#         new_image = Image(image=file2, id=current_user.id)
+#         db.session.add(new_image)
+#         db.session.commit()
+#         flash('Image added!', category='success')    
+
+    # #Return a  response to the client
+    # return render_template("watermark.html", user=current_user)
+
 @views.route('/watermark', methods=['GET','POST'])
 @login_required
 def watermark():
     if request.method =='POST':
-        #Get the uploaded file from the form data
-        file = request.files['image']
+        pic = request.files['image']
 
-        #Save the file to a location on the server
-        file.save(r'website/Image/watermarked.png')
+        if not pic:
+                return "no pic uploaded", 400
+        
+        filename = secure_filename(pic.filename)
+        mimetype = pic.mimetype
+        img = Image(image=pic.read(), mimetype=mimetype, name=filename)
+        db.session.add(img)
+        db.session.commit()
+        flash('Image has been uploaded!', category='success')
 
-    #Return a  response to the client
     return render_template("watermark.html", user=current_user)

@@ -22,6 +22,8 @@ layer.add(stageBorder)
 
 // main API:
 var imageObj = new Image();
+imageObj.src = '/website/static/watermarked.jpg';
+
 imageObj.onload = function () {
   var yoda = new Konva.Image({
     x: 50,
@@ -34,7 +36,7 @@ imageObj.onload = function () {
   // add the shape to the layer
   layer.add(yoda);
 };
-imageObj.src = '/website/Image/watermarked.png';
+
 
 var addButton = document.getElementById('rectangletool');
 addButton.addEventListener('click', function(){
