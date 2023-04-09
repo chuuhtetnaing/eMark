@@ -106,7 +106,7 @@ def apply_watermark(raw_image, name, watermark_text):
 def watermark():
     if request.method == 'POST':
         pic = request.files['image']
-        watermark_text = request.form['watermark_text']
+        watermark_text = "Digital Watermark"
 
         if not pic:
             return "no pic uploaded", 404
