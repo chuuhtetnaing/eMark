@@ -9,7 +9,6 @@ from werkzeug.utils import secure_filename
 
 from . import db
 from .models import Note, Imge
-import copy
 
 src = "https://code.jquery.com/jquery-3.6.0.min.js"
 
