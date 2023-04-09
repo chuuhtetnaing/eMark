@@ -21,7 +21,7 @@ const stageBorder = new Konva.Rect({
 layer.add(stageBorder)
 
 var imageObj = new Image();
-imageObj.src = "website/static/watermarked.jpg";
+imageObj.src = "/static/watermarked.jpg";
 
 // var imageButton = document.getElementById('insert_image');
 imageObj.onload = function () {

@@ -1,14 +1,44 @@
+<script>
+
+
+    const loadFile = function(event) {
+        const reader = new FileReader();
+        const img_div = document.getElementById("output");
+        reader.onload = function(){
+            const output = document.getElementById('output');
+            output.src = reader.result;
+            img_div.removeAttribute("hidden");
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
+</script>
+
 {%extends "base.html" %}
 {%block title %}Home{% endblock %}
 
 
 {% block content %}
-<h1 align="center">Watermark</h1>
-<div align="center" id="konva-holder"></div>
-<br />
-<form method="POST" enctype="multipart/form-data" align="center" action="/watermark">
-    <input type="file" id="image_input" name="image" accept="image/*">
-    <input type="submit" id="upload-image" value="Upload">
-    <!-- <button id="insert_image" type="button" class="btn btn-info">Insert Image</button> -->
-</form>
+    <h1 align="center">Watermark</h1>
+    {#<div align="center" id="konva-holder"></div>#}
+    <br />
+
+    {% if image %}
+        <div align="center" >
+            <img style="height: 50vh" src="{{ image }}"/>
+        </div>
+    {% endif %}
+    <div align="center" >
+        <img hidden id="output" style="height: 50vh" src="{{ image }}"/>
+    </div>
+
+    <br />
+
+    <form method="POST" enctype="multipart/form-data" align="center" action="/watermark">
+        <textarea id="watermark_text" name="watermark_text" rows="4" cols="50" autofocus placeholder="Please type watermark here..."></textarea>
+        <br />
+        <br />
+        <input type="file" id="image_input" name="image" accept="image/*" onchange="loadFile(event)">
+        <input type="submit" id="upload-image" value="Upload">
+        <!-- <button id="insert_image" type="button" class="btn btn-info">Insert Image</button> -->
+    </form>
 {% endblock %}
